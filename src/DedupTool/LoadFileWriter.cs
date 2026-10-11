@@ -18,10 +18,20 @@ public static class LoadFileWriter
         foreach (var r in rows)
         {
             sb.Append(string.Join(",",
-                r.DocId, r.FamilyId, r.ParentId, r.Custodian,
-                r.DocType, r.FileName, r.SentDate, r.Hash)).Append('\n');
+                Escape(r.DocId), Escape(r.FamilyId), Escape(r.ParentId), Escape(r.Custodian),
+                Escape(r.DocType), Escape(r.FileName), Escape(r.SentDate), Escape(r.Hash))).Append('\n');
         }
         return sb.ToString();
+    }
+
+    private static string Escape(string value)
+    {
+        if (!value.Contains(',') && !value.Contains('"') && !value.Contains('\r') && !value.Contains('\n'))
+        {
+            return value;
+        }
+
+        return $"\"{value.Replace("\"", "\"\"")}\"";
     }
 
     public static void Write(string path, IEnumerable<LoadFileRow> rows)

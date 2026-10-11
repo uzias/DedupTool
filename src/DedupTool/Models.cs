@@ -36,4 +36,13 @@ public class LoadFileRow
     public string Hash { get; set; } = "";
 }
 
-public record DedupResult(List<LoadFileRow> Rows, int Suppressed);
+public sealed record DedupDecision(
+    string DocId,
+    string Action,
+    string CanonicalId,
+    string Reason);
+
+public record DedupResult(
+    List<LoadFileRow> Rows,
+    int Suppressed,
+    IReadOnlyList<DedupDecision> Decisions);
